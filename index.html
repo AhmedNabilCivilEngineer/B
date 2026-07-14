@@ -31,29 +31,17 @@
         .company-subtext { font-size: 13px; color: var(--primary-gold); letter-spacing: 3px; font-weight: bold; margin-top: 2px; }
         .portal-title { font-size: 16px; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
 
-        .input-group { margin-bottom: 20px; text-align: left; }
-        .input-group label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-gold); margin-bottom: 8px; }
-        .input-group select, .input-group input { width: 100%; padding: 12px; background-color: #222; border: 1px solid var(--border-color); border-radius: 6px; color: #fff; font-size: 16px; }
-        
-        .login-btn { width: 100%; padding: 14px; background-color: var(--primary-gold); border: none; border-radius: 6px; color: #111; font-size: 15px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; margin-bottom: 15px;}
-        .login-btn:hover { background-color: var(--dark-gold); color: #fff; }
-
-        .divider { margin: 15px 0; display: flex; align-items: center; text-align: center; font-size: 12px; color: var(--text-muted); }
-        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border-color); }
-        .divider:not(:empty)::before { margin-right: .5em; }
-        .divider:not(:empty)::after { margin-left: .5em; }
-
-        .google-btn { width: 100%; padding: 12px; background-color: #fff; border: none; border-radius: 6px; color: #222; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
+        .google-btn { width: 100%; padding: 14px; background-color: #fff; border: none; border-radius: 6px; color: #222; font-size: 15px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; margin-top: 10px; }
         .google-btn:hover { background-color: #e5e5e5; }
-        .google-icon-svg { width: 16px; height: 16px; }
+        .google-icon-svg { width: 18px; height: 18px; }
 
-        #message-box { margin-top: 15px; padding: 10px; border-radius: 6px; font-size: 13px; text-align: center; display: block; }
+        #message-box { margin-top: 15px; padding: 10px; border-radius: 6px; font-size: 13px; text-align: center; display: block; word-break: break-word; }
         .error { background-color: rgba(231, 76, 60, 0.15); color: var(--error-red); border: 1px solid var(--error-red); }
         .info { background-color: rgba(179, 143, 79, 0.1); color: var(--primary-gold); border: 1px solid var(--primary-gold); }
 
         .sidebar { background-color: #111; border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
         .mini-logo { font-size: 22px; font-weight: bold; color: var(--primary-gold); margin-bottom: 15px; }
-        .user-badge { background: #222; padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-gold); margin-bottom: 15px; font-size: 13px; }
+        .user-badge { background: #222; padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-gold); margin-bottom: 15px; font-size: 13px; text-align: left; word-break: break-all; }
         .channels-list h4 { font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; letter-spacing: 1px;}
         .channel-item { padding: 10px; border-radius: 6px; background: #1a1a1a; font-size: 13px; color: var(--primary-gold); font-weight: bold; border: 1px solid var(--border-color); margin-bottom: 15px; }
         .active-users-box { flex: 1; display: flex; flex-direction: column; margin-bottom: 15px; }
@@ -91,7 +79,7 @@
 </head>
 <body>
 
-    <!-- Repaired Entry Interface Card -->
+    <!-- Portal Authentication Gateway UI -->
     <div class="portal-container" id="loginScreen">
         <div class="logo-area">
             <div class="logo-icon">B</div>
@@ -100,26 +88,6 @@
         </div>
         <h2 class="portal-title">Secure Communications Portal</h2>
         
-        <form id="portalLoginForm">
-            <div class="input-group">
-                <label for="portal-id">Select Identity</label>
-                <select id="portal-id" required>
-                    <option value="" disabled selected>-- Select Member --</option>
-                    <option value="Eng. Ahmed Nabil">Eng. Ahmed Nabil</option>
-                    <option value="Eng. Youssef Nabil">Eng. Youssef Nabil</option>
-                    <option value="Eng. Noha Alhaddad">Eng. Noha Alhaddad</option>
-                    <option value="Eng. Nabil Hassan">Eng. Nabil Hassan</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label for="password">Security Password Code</label>
-                <input type="password" id="password" placeholder="••••••••" required>
-            </div>
-            <button type="submit" class="login-btn">Secure Login</button>
-        </form>
-
-        <div class="divider">OR</div>
-
         <button id="googleSignInBtn" class="google-btn">
             <svg class="google-icon-svg" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -127,6 +95,47 @@
                 <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.85z"/>
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.85c.87-2.6 3.3-4.53 6.16-4.53z"/>
             </svg>
-            Sign in with Google
+            Sign in with Google Account
         </button>
         
+        <div id="message-box" class="info">Ready to connect. Click above to login.</div>
+    </div>
+
+    <!-- Protected Workspace Dashboard UI -->
+    <div class="dashboard-container" id="dashboardScreen">
+        <aside class="sidebar" id="sidebarMenu">
+            <div class="mini-logo">BCT Portal</div>
+            <div class="user-badge">
+                <span id="activeUserLabel" style="font-weight: bold; display: block;">Connecting...</span>
+                <span id="activeEmailLabel" style="font-size: 11px; color: var(--text-muted);"></span>
+            </div>
+            <div class="channels-list">
+                <h4>Active Feed</h4>
+                <div class="channel-item"># Operations_Room</div>
+            </div>
+            <div class="active-users-box">
+                <h4>Online Members</h4>
+                <div class="users-list" id="onlineUsersList"></div>
+            </div>
+            <button class="logout-btn" id="portalLogoutBtn">Terminate Session</button>
+        </aside>
+
+        <main class="chat-area">
+            <header class="chat-header">
+                <div>
+                    <span class="status-dot"></span>
+                    <span id="currentChannelLabel"># Operations_Room</span>
+                </div>
+                <button class="mobile-toggle-btn" id="menuToggleBtn">Menu</button>
+            </header>
+            <div class="messages-window" id="messagesWindow"></div>
+            <form class="input-bar" id="chatMessageForm">
+                <input type="text" id="messageInputField" placeholder="Type verified transmission..." autocomplete="off" required>
+                <button type="submit" class="send-btn">Send</button>
+            </form>
+        </main>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://gstatic.com";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://gstatic.com";
