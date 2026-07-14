@@ -7,25 +7,40 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
     <style>
         :root {
-            --primary-gold: #b38f4f; --dark-gold: #8e6f37; --dark-bg: #111111; --card-bg: #1a1a1a; 
-            --text-light: #ffffff; --text-muted: #aaaaaa; --border-color: #333333; --success-green: #2ecc71; --error-red: #e74c3c;
+            --primary-gold: #b38f4f;
+            --dark-gold: #8e6f37;
+            --dark-bg: #111111;
+            --card-bg: #1a1a1a;
+            --text-light: #ffffff;
+            --text-muted: #aaaaaa;
+            --border-color: #333333;
+            --success-green: #2ecc71;
+            --error-red: #e74c3c;
         }
+
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
+
         body { background-color: var(--dark-bg); color: var(--text-light); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 10px; overflow: hidden; }
+
         .portal-container { background-color: var(--card-bg); width: 100%; max-width: 420px; padding: 30px 20px; border-radius: 12px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); border: 1px solid var(--border-color); text-align: center; }
+
         .dashboard-container { display: none; background-color: var(--card-bg); width: 100%; max-width: 900px; height: 85vh; border-radius: 12px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); border: 1px solid var(--border-color); grid-template-columns: 260px 1fr; overflow: hidden; }
+
         .logo-area { margin-bottom: 20px; }
         .logo-icon { font-size: 54px; font-weight: bold; color: var(--primary-gold); line-height: 1; margin-bottom: 5px; font-family: 'Times New Roman', Times, serif; }
         .company-name { font-size: 22px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
         .company-subtext { font-size: 13px; color: var(--primary-gold); letter-spacing: 3px; font-weight: bold; margin-top: 2px; }
         .portal-title { font-size: 16px; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+
         .input-group { margin-bottom: 20px; text-align: left; }
         .input-group label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-gold); margin-bottom: 8px; }
         .input-group select, .input-group input { width: 100%; padding: 12px; background-color: #222; border: 1px solid var(--border-color); border-radius: 6px; color: #fff; font-size: 16px; }
         .login-btn { width: 100%; padding: 14px; background-color: var(--primary-gold); border: none; border-radius: 6px; color: #111; font-size: 15px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
         .login-btn:hover { background-color: var(--dark-gold); color: #fff; }
+
         #message-box { margin-top: 15px; padding: 10px; border-radius: 6px; font-size: 14px; display: none; }
         .error { background-color: rgba(231, 76, 60, 0.15); color: var(--error-red); border: 1px solid var(--error-red); }
+
         .sidebar { background-color: #111; border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
         .mini-logo { font-size: 22px; font-weight: bold; color: var(--primary-gold); margin-bottom: 15px; }
         .user-badge { background: #222; padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-gold); margin-bottom: 15px; font-size: 13px; }
@@ -38,20 +53,25 @@
         .clear-btn { border-color: var(--text-muted); color: var(--text-muted); }
         .logout-btn:hover { background: var(--error-red); color: #fff; }
         .clear-btn:hover { border-color: #fff; color: #fff; }
+
         .chat-area { display: flex; flex-direction: column; background: #161616; min-height: 0; }
         .chat-header { padding: 15px 20px; border-bottom: 1px solid var(--border-color); background: var(--card-bg); font-weight: bold; display: flex; justify-content: space-between; align-items: center;}
         .status-dot { width: 8px; height: 8px; background: var(--success-green); border-radius: 50%; display: inline-block; margin-right: 5px; }
         .mobile-toggle-btn { display: none; background: #222; border: 1px solid var(--primary-gold); color: var(--primary-gold); padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer; }
+        
         .messages-window { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+        
         .msg { max-width: 85%; padding: 10px 14px; border-radius: 8px; line-height: 1.4; font-size: 14px; word-break: break-word; position: relative; }
         .msg.received { background: #222; align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid var(--border-color); }
         .msg.sent { background: var(--primary-gold); color: #111; align-self: flex-end; border-bottom-right-radius: 2px; font-weight: 500; }
         .msg-meta { font-size: 10px; color: var(--text-muted); margin-bottom: 3px; display: block; }
         .msg.sent .msg-meta { color: #333; font-weight: bold; }
         .del-x { position: absolute; top: 0; right: -15px; cursor: pointer; color: var(--error-red); font-weight: bold; font-size: 12px; }
+
         .input-bar { padding: 15px; background: var(--card-bg); border-top: 1px solid var(--border-color); display: flex; gap: 8px; flex-shrink: 0; }
         .input-bar input { flex: 1; padding: 12px; background: #111; border: 1px solid var(--border-color); border-radius: 6px; color: #fff; font-size: 16px; }
         .send-btn { padding: 0 15px; background: var(--primary-gold); border: none; border-radius: 6px; color: #111; font-weight: bold; cursor: pointer; font-size: 15px; }
+
         @media (max-width: 768px) {
             body { padding: 0; }
             .portal-container { border-radius: 0; border: none; height: 100vh; }
@@ -63,6 +83,7 @@
     </style>
 </head>
 <body>
+
     <div class="portal-container" id="loginScreen">
         <div class="logo-area">
             <div class="logo-icon">B</div>
@@ -89,6 +110,7 @@
         </form>
         <div id="message-box"></div>
     </div>
+
     <div class="dashboard-container" id="dashboardScreen">
         <aside class="sidebar" id="sidebarMenu">
             <div class="mini-logo">BCT Portal</div>
@@ -104,6 +126,7 @@
             <button class="clear-btn" onclick="clearAllChat()">Clear All Chat</button>
             <button class="logout-btn" onclick="handleLogout()">Disconnect</button>
         </aside>
+
         <main class="chat-area">
             <div class="chat-header">
                 <button class="mobile-toggle-btn" onclick="toggleMobileMenu()" id="menuToggleBtn">👥 Online</button>
@@ -119,6 +142,7 @@
             </form>
         </main>
     </div>
+
     <script>
         const userCredentials = { 'Eng. Ahmed Nabil': 'Bayan2026', 'Eng. Youssef Nabil': 'Bayan2026', 'Eng. Noha Alhaddad': 'Bayan2026', 'Eng. Nabil Hassan': 'Bayan2026' };
         let currentActiveUser = "", client = null, deviceSessionToken = "dev_" + Math.random().toString(16).substr(2, 8);
@@ -135,7 +159,7 @@
         function clearAllChat() {
             if(confirm("Clear all messages?")) {
                 localStorage.removeItem('bct_hist');
-                document.getElementById('messagesWindow').innerHTML = ""; // Clears UI immediately[span_2](start_span)[span_2](end_span)
+                document.getElementById('messagesWindow').innerHTML = "";
             }
         }
 
@@ -148,11 +172,7 @@
         }
 
         function loadHistory() {
-            const history = JSON.parse(localStorage.getItem('bct_hist') || '[]');
-            history.forEach(m => {
-                const isMe = (m.sender === currentActiveUser);
-                displayMsg(m.sender, m.msg, isMe, m.file, m.fileName, m.id, false);
-            });
+            JSON.parse(localStorage.getItem('bct_hist') || '[]').forEach(m => displayMsg(m.sender, m.msg, m.isSelf, m.file, m.fileName, m.id, false));
         }
 
         function toggleMobileMenu() {
@@ -215,7 +235,7 @@
             const id = Date.now();
             reader.onload = function(e) {
                 client.publish(CHAT_TOPIC, JSON.stringify({ token: deviceSessionToken, user: currentActiveUser, file: e.target.result, fileName: file.name, id: id }));
-                displayMsg(currentActiveUser, null, true, e.target.result, file.name, id, true);
+                displayMsg("You", null, true, e.target.result, file.name, id, true);
             };
             reader.readAsDataURL(file);
         }
@@ -239,7 +259,7 @@
             if (input.value.trim() === "" || !client) return;
             const id = Date.now();
             client.publish(CHAT_TOPIC, JSON.stringify({ token: deviceSessionToken, user: currentActiveUser, message: input.value, id: id }));
-            displayMsg(currentActiveUser, input.value, true, null, null, id, true);
+            displayMsg("You", input.value, true, null, null, id, true);
             input.value = "";
         }
 
