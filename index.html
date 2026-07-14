@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BAYAN Company (BCT) - Communication Portal</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
+    <script src="https://cloudflare.com"></script>
     <style>
         :root {
             --primary-gold: #b38f4f;
@@ -38,7 +38,7 @@
         .login-btn { width: 100%; padding: 14px; background-color: var(--primary-gold); border: none; border-radius: 6px; color: #111; font-size: 15px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
         .login-btn:hover { background-color: var(--dark-gold); color: #fff; }
 
-        #message-box { margin-top: 15px; padding: 10px; border-radius: 6px; font-size: 14px; display: none; }
+        #message-box { margin-top: 15px; padding: 10px; border-radius: 6px; font-size: 13px; display: block; text-align: center; }
         .error { background-color: rgba(231, 76, 60, 0.15); color: var(--error-red); border: 1px solid var(--error-red); }
         .info { background-color: rgba(179, 143, 79, 0.1); color: var(--primary-gold); border: 1px solid var(--primary-gold); }
 
@@ -107,7 +107,7 @@
             </div>
             <button type="submit" class="login-btn">Secure Login</button>
         </form>
-        <div id="message-box"></div>
+        <div id="message-box" class="info">Portal secured. Select identity profile to initialize.</div>
     </div>
 
     <!-- Main Workspace Dashboard View -->
@@ -144,5 +144,3 @@
         </main>
     </div>
 
-    <!-- Firebase Connection, Security Architecture and Logic Modules -->
-    <script type="module">
