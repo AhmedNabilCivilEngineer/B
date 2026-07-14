@@ -215,7 +215,7 @@
             const id = Date.now();
             reader.onload = function(e) {
                 client.publish(CHAT_TOPIC, JSON.stringify({ token: deviceSessionToken, user: currentActiveUser, file: e.target.result, fileName: file.name, id: id }));
-                displayMsg("You", null, true, e.target.result, file.name, id, true);
+                displayMsg(currentActiveUser, null, true, e.target.result, file.name, id, true);
             };
             reader.readAsDataURL(file);
         }
@@ -239,7 +239,7 @@
             if (input.value.trim() === "" || !client) return;
             const id = Date.now();
             client.publish(CHAT_TOPIC, JSON.stringify({ token: deviceSessionToken, user: currentActiveUser, message: input.value, id: id }));
-            displayMsg("You", input.value, true, null, null, id, true);
+            displayMsg(currentActiveUser, input.value, true, null, null, id, true);
             input.value = "";
         }
 
