@@ -4,6 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BAYAN Company (BCT) - Communication Portal</title>
+    
+    <!-- Firebase SDK Setup -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAUQl0ozyAaI6UrM98uYVWIdK1kobjjL4g",
+            authDomain: "bct-66404.firebaseapp.com",
+            databaseURL: "https://bct-66404-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "bct-66404",
+            storageBucket: "bct-66404.firebasestorage.app",
+            messagingSenderId: "337031921557",
+            appId: "1:337031921557:web:b28321a917c3bdf572809c",
+            measurementId: "G-LZ2XK1EF0H"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
     <style>
         :root {
             --primary-gold: #b38f4f;
@@ -18,30 +40,24 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
-
         body { background-color: var(--dark-bg); color: var(--text-light); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 10px; overflow: hidden; }
-
         .portal-container { background-color: var(--card-bg); width: 100%; max-width: 420px; padding: 30px 20px; border-radius: 12px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); border: 1px solid var(--border-color); text-align: center; }
-
         .dashboard-container { display: none; background-color: var(--card-bg); width: 100%; max-width: 900px; height: 85vh; border-radius: 12px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); border: 1px solid var(--border-color); grid-template-columns: 260px 1fr; overflow: hidden; }
-
         .logo-area { margin-bottom: 20px; }
         .logo-icon { font-size: 54px; font-weight: bold; color: var(--primary-gold); line-height: 1; margin-bottom: 5px; font-family: 'Times New Roman', Times, serif; }
         .company-name { font-size: 22px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
         .company-subtext { font-size: 13px; color: var(--primary-gold); letter-spacing: 3px; font-weight: bold; margin-top: 2px; }
         .portal-title { font-size: 16px; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
-
-        .google-btn { width: 100%; padding: 14px; background-color: #fff; border: none; border-radius: 6px; color: #222; font-size: 15px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; margin-top: 10px; }
-        .google-btn:hover { background-color: #e5e5e5; }
-        .google-icon-svg { width: 18px; height: 18px; }
-
-        #message-box { margin-top: 15px; padding: 10px; border-radius: 6px; font-size: 13px; text-align: center; display: block; word-break: break-word; }
+        .input-group { margin-bottom: 20px; text-align: left; }
+        .input-group label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-gold); margin-bottom: 8px; }
+        .input-group select, .input-group input { width: 100%; padding: 12px; background-color: #222; border: 1px solid var(--border-color); border-radius: 6px; color: #fff; font-size: 16px; }
+        .login-btn { width: 100%; padding: 14px; background-color: var(--primary-gold); border: none; border-radius: 6px; color: #111; font-size: 15px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        .login-btn:hover { background-color: var(--dark-gold); color: #fff; }
+        #message-box { margin-top: 15px; padding: 10px; border-radius: 6px; font-size: 14px; display: none; }
         .error { background-color: rgba(231, 76, 60, 0.15); color: var(--error-red); border: 1px solid var(--error-red); }
-        .info { background-color: rgba(179, 143, 79, 0.1); color: var(--primary-gold); border: 1px solid var(--primary-gold); }
-
         .sidebar { background-color: #111; border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
         .mini-logo { font-size: 22px; font-weight: bold; color: var(--primary-gold); margin-bottom: 15px; }
-        .user-badge { background: #222; padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-gold); margin-bottom: 15px; font-size: 13px; text-align: left; word-break: break-all; }
+        .user-badge { background: #222; padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-gold); margin-bottom: 15px; font-size: 13px; }
         .channels-list h4 { font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; letter-spacing: 1px;}
         .channel-item { padding: 10px; border-radius: 6px; background: #1a1a1a; font-size: 13px; color: var(--primary-gold); font-weight: bold; border: 1px solid var(--border-color); margin-bottom: 15px; }
         .active-users-box { flex: 1; display: flex; flex-direction: column; margin-bottom: 15px; }
@@ -49,20 +65,16 @@
         .users-list { display: flex; flex-direction: column; gap: 6px; }
         .logout-btn { padding: 10px; background: transparent; border: 1px solid var(--error-red); color: var(--error-red); border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; min-height: 40px; }
         .logout-btn:hover { background: var(--error-red); color: #fff; }
-
         .chat-area { display: flex; flex-direction: column; background: #161616; min-height: 0; }
         .chat-header { padding: 15px 20px; border-bottom: 1px solid var(--border-color); background: var(--card-bg); font-weight: bold; display: flex; justify-content: space-between; align-items: center;}
         .status-dot { width: 8px; height: 8px; background: var(--success-green); border-radius: 50%; display: inline-block; margin-right: 5px; }
         .mobile-toggle-btn { display: none; background: #222; border: 1px solid var(--primary-gold); color: var(--primary-gold); padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer; }
-        
         .messages-window { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; min-height: 0; }
-        
         .msg { max-width: 85%; padding: 10px 14px; border-radius: 8px; line-height: 1.4; font-size: 14px; word-break: break-word; }
         .msg.received { background: #222; align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid var(--border-color); }
         .msg.sent { background: var(--primary-gold); color: #111; align-self: flex-end; border-bottom-right-radius: 2px; font-weight: 500; }
         .msg-meta { font-size: 10px; color: var(--text-muted); margin-bottom: 3px; display: block; }
         .msg.sent .msg-meta { color: #333; font-weight: bold; }
-
         .input-bar { padding: 15px; background: var(--card-bg); border-top: 1px solid var(--border-color); display: flex; gap: 8px; flex-shrink: 0; }
         .input-bar input { flex: 1; padding: 12px; background: #111; border: 1px solid var(--border-color); border-radius: 6px; color: #fff; font-size: 16px; }
         .send-btn { padding: 0 15px; background: var(--primary-gold); border: none; border-radius: 6px; color: #111; font-weight: bold; cursor: pointer; font-size: 15px; }
@@ -79,7 +91,6 @@
 </head>
 <body>
 
-    <!-- Portal Authentication Gateway UI -->
     <div class="portal-container" id="loginScreen">
         <div class="logo-area">
             <div class="logo-icon">B</div>
@@ -87,55 +98,154 @@
             <div class="company-subtext">BCT</div>
         </div>
         <h2 class="portal-title">Secure Communications Portal</h2>
-        
-        <button id="googleSignInBtn" class="google-btn">
-            <svg class="google-icon-svg" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.85z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.85c.87-2.6 3.3-4.53 6.16-4.53z"/>
-            </svg>
-            Sign in with Google Account
-        </button>
-        
-        <div id="message-box" class="info">Ready to connect. Click above to login.</div>
+        <form onsubmit="handleLogin(event)">
+            <div class="input-group">
+                <label for="portal-id">Select Identity</label>
+                <select id="portal-id" required>
+                    <option value="" disabled selected>-- Select Member --</option>
+                    <option value="Eng. Ahmed Nabil">Eng. Ahmed Nabil</option>
+                    <option value="Eng. Youssef Nabil">Eng. Youssef Nabil</option>
+                    <option value="Eng. Noha Alhaddad">Eng. Noha Alhaddad</option>
+                    <option value="Eng. Nabil Hassan">Eng. Nabil Hassan</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="password">Security Password</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="login-btn">Secure Login</button>
+        </form>
+        <div id="message-box"></div>
     </div>
 
-    <!-- Protected Workspace Dashboard UI -->
     <div class="dashboard-container" id="dashboardScreen">
         <aside class="sidebar" id="sidebarMenu">
             <div class="mini-logo">BCT Portal</div>
-            <div class="user-badge">
-                <span id="activeUserLabel" style="font-weight: bold; display: block;">Connecting...</span>
-                <span id="activeEmailLabel" style="font-size: 11px; color: var(--text-muted);"></span>
-            </div>
+            <div class="user-badge"><span style="color: var(--primary-gold); font-weight: bold;">User:</span> <div id="displayUser"></div></div>
             <div class="channels-list">
-                <h4>Active Feed</h4>
-                <div class="channel-item"># Operations_Room</div>
+                <h4>Active Channel</h4>
+                <div class="channel-item">📢 company-wide</div>
             </div>
             <div class="active-users-box">
-                <h4>Online Members</h4>
-                <div class="users-list" id="onlineUsersList"></div>
+                <h4>Online Personnel</h4>
+                <div class="users-list" id="presenceList"></div>
             </div>
-            <button class="logout-btn" id="portalLogoutBtn">Terminate Session</button>
+            <button class="logout-btn" onclick="handleLogout()">Disconnect</button>
         </aside>
 
         <main class="chat-area">
-            <header class="chat-header">
-                <div>
-                    <span class="status-dot"></span>
-                    <span id="currentChannelLabel"># Operations_Room</span>
-                </div>
-                <button class="mobile-toggle-btn" id="menuToggleBtn">Menu</button>
-            </header>
+            <div class="chat-header">
+                <button class="mobile-toggle-btn" onclick="toggleMobileMenu()" id="menuToggleBtn">👥 Online</button>
+                <div id="chatRoomTitle">Bayan Feed</div>
+                <div style="font-size: 12px; color: var(--text-muted);"><span class="status-dot"></span> Secure</div>
+            </div>
             <div class="messages-window" id="messagesWindow"></div>
-            <form class="input-bar" id="chatMessageForm">
-                <input type="text" id="messageInputField" placeholder="Type verified transmission..." autocomplete="off" required>
+            <form class="input-bar" onsubmit="sendMessage(event)">
+                <input type="file" id="fileInput" accept="image/*,application/pdf" style="display:none" onchange="handleFileSelection(event)">
+                <button type="button" class="send-btn" onclick="document.getElementById('fileInput').click()">📎</button>
+                <input type="text" id="typeBox" placeholder="Type a message..." autocomplete="off">
                 <button type="submit" class="send-btn">Send</button>
             </form>
         </main>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://gstatic.com";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://gstatic.com";
+    <script>
+        const userCredentials = { 'Eng. Ahmed Nabil': 'Bayan2026', 'Eng. Youssef Nabil': 'Bayan2026', 'Eng. Noha Alhaddad': 'Bayan2026', 'Eng. Nabil Hassan': 'Bayan2026' };
+        let currentActiveUser = "", client = null, deviceSessionToken = "dev_" + Math.random().toString(16).substr(2, 8);
+        const CHAT_TOPIC = "bayan/company/bct_broadcast_channel_main";
+        const PRESENCE_TOPIC = "bayan/company/presence/";
+        let onlineUsers = {};
+
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebarMenu');
+            sidebar.classList.toggle('active');
+            document.getElementById('menuToggleBtn').innerText = sidebar.classList.contains('active') ? "❌ Close" : "👥 Online";
+        }
+
+        function renderPresenceList() {
+            const listDiv = document.getElementById('presenceList');
+            listDiv.innerHTML = "";
+            Object.keys(onlineUsers).forEach(user => {
+                listDiv.insertAdjacentHTML('beforeend', `<div style="font-size: 12px; color: #fff; padding: 4px 0;"><span class="status-dot"></span> ${user}</div>`);
+            });
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const selectedId = document.getElementById('portal-id').value;
+            if (userCredentials[selectedId] === document.getElementById('password').value) {
+                currentActiveUser = selectedId;
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('dashboardScreen').style.display = 'grid';
+                document.getElementById('displayUser').innerText = selectedId;
+                initLiveSync();
+            } else {
+                const box = document.getElementById('message-box');
+                box.className = "error"; box.innerText = "Invalid Password."; box.style.display = "block";
+            }
+        }
+
+        function initLiveSync() {
+            client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt', {
+                will: { topic: PRESENCE_TOPIC + currentActiveUser, payload: JSON.stringify({status: "offline", user: currentActiveUser}), retain: true }
+            });
+            client.on('connect', () => {
+                client.subscribe(CHAT_TOPIC);
+                client.subscribe(PRESENCE_TOPIC + "+");
+                client.publish(PRESENCE_TOPIC + currentActiveUser, JSON.stringify({status: "online", user: currentActiveUser}), {retain: true});
+            });
+            client.on('message', (topic, payload) => {
+                const data = JSON.parse(payload.toString());
+                if (topic.startsWith(PRESENCE_TOPIC)) {
+                    if (data.status === "online") onlineUsers[data.user] = true;
+                    else delete onlineUsers[data.user];
+                    renderPresenceList();
+                } else if (data.token !== deviceSessionToken) {
+                    displayIncomingMessage(data.user, data.message, false, data.file, data.fileName);
+                }
+            });
+        }
+
+        function handleFileSelection(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                client.publish(CHAT_TOPIC, JSON.stringify({ token: deviceSessionToken, user: currentActiveUser, file: e.target.result, fileName: file.name }));
+                displayIncomingMessage("You", null, true, e.target.result, file.name);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function displayIncomingMessage(sender, message, isSelf = false, fileData = null, fileName = "") {
+            const windowObj = document.getElementById('messagesWindow');
+            let content = message ? message : "";
+            if (fileData) {
+                const isImg = fileData.startsWith('data:image');
+                content += `<div style="margin-top:5px">
+                    <a href="${fileData}" download="${fileName}" style="color:var(--primary-gold); font-weight:bold; text-decoration:none">
+                        ${isImg ? `<img src="${fileData}" style="max-width:100%; display:block; border-radius:4px; margin-bottom:5px">` : "📄"} 
+                        📥 ${fileName}
+                    </a>
+                </div>`;
+            }
+            windowObj.insertAdjacentHTML('beforeend', `<div class="msg ${isSelf ? 'sent' : 'received'}"><span class="msg-meta">${sender}</span>${content}</div>`);
+            windowObj.scrollTop = windowObj.scrollHeight;
+        }
+
+        function sendMessage(event) {
+            event.preventDefault();
+            const input = document.getElementById('typeBox');
+            if (input.value.trim() === "" || !client) return;
+            client.publish(CHAT_TOPIC, JSON.stringify({ token: deviceSessionToken, user: currentActiveUser, message: input.value }));
+            displayIncomingMessage("You", input.value, true);
+            input.value = "";
+        }
+
+        function handleLogout() {
+            client.publish(PRESENCE_TOPIC + currentActiveUser, JSON.stringify({status: "offline", user: currentActiveUser}), {retain: true});
+            location.reload();
+        }
+    </script>
+</body>
+</html>
