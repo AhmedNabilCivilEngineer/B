@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BAYAN Company (BCT) - Communication Portal</title>
-    <script src="https://cloudflare.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
     <style>
         :root {
             --primary-gold: #b38f4f;
@@ -97,11 +97,17 @@
                     <option value="" disabled selected>-- Select Member --</option>
                     <option value="Eng. Ahmed Nabil">Eng. Ahmed Nabil</option>
                     <option value="Eng. Youssef Nabil">Eng. Youssef Nabil</option>
+                    <option value="Eng. Noha Alhaddad">Eng. Noha Alhaddad</option>
+                    <option value="Eng. Nabil Hassan">Eng. Nabil Hassan</option>
                 </select>
             </div>
-            <button type="submit" class="login-btn">Establish Connection</button>
+            <div class="input-group">
+                <label for="password">Security Password</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="login-btn">Secure Login</button>
         </form>
-        <div id="message-box" class="info">System ready. Select a member profile.</div>
+        <div id="message-box"></div>
     </div>
 
     <!-- Main Workspace Dashboard View -->
@@ -138,10 +144,5 @@
         </main>
     </div>
 
-    <!-- Firebase SDK Logic Modules -->
+    <!-- Firebase Connection, Security Architecture and Logic Modules -->
     <script type="module">
-        import { initializeApp } from "https://gstatic.com";
-        import { getDatabase, ref, push, set, onChildAdded, onValue, serverTimestamp } from "https://gstatic.com";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyAUQl0ozyAaI6UrM98uYVWIdK1kobjjL4g",
