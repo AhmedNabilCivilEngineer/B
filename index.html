@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BAYAN Company (BCT) - Communication Portal</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
+    <script src="https://cloudflare.com"></script>
     <style>
         :root {
             --primary-gold: #b38f4f;
@@ -40,6 +40,7 @@
 
         #message-box { margin-top: 15px; padding: 10px; border-radius: 6px; font-size: 14px; display: none; }
         .error { background-color: rgba(231, 76, 60, 0.15); color: var(--error-red); border: 1px solid var(--error-red); }
+        .info { background-color: rgba(179, 143, 79, 0.1); color: var(--primary-gold); border: 1px solid var(--primary-gold); }
 
         .sidebar { background-color: #111; border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
         .mini-logo { font-size: 22px; font-weight: bold; color: var(--primary-gold); margin-bottom: 15px; }
@@ -81,7 +82,7 @@
 </head>
 <body>
 
-    <!-- Access Portal View -->
+    <!-- Portal Login Screen View -->
     <div class="portal-container" id="loginScreen">
         <div class="logo-area">
             <div class="logo-icon">B</div>
@@ -100,7 +101,7 @@
             </div>
             <button type="submit" class="login-btn">Establish Connection</button>
         </form>
-        <div id="message-box" class="error"></div>
+        <div id="message-box" class="info">System ready. Select a member profile.</div>
     </div>
 
     <!-- Main Workspace Dashboard View -->
@@ -137,12 +138,10 @@
         </main>
     </div>
 
-    <!-- Firebase Connection, Security Architecture and Logic Modules -->
+    <!-- Firebase SDK Logic Modules -->
     <script type="module">
         import { initializeApp } from "https://gstatic.com";
         import { getDatabase, ref, push, set, onChildAdded, onValue, serverTimestamp } from "https://gstatic.com";
 
-        // Runtime Security Mapping from Safe System Environment
         const firebaseConfig = {
-            apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-            authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+            apiKey: "AIzaSyAUQl0ozyAaI6UrM98uYVWIdK1kobjjL4g",
