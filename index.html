@@ -49,11 +49,9 @@
         .active-users-box { flex: 1; display: flex; flex-direction: column; margin-bottom: 15px; }
         .active-users-box h4 { font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; letter-spacing: 1px; }
         .users-list { display: flex; flex-direction: column; gap: 6px; }
-        .logout-btn { padding: 10px; background: transparent; border: 1px solid var(--error-red); color: var(--error-red); border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; min-height: 40px; }
+        .logout-btn, .clear-btn { padding: 10px; background: transparent; border: 1px solid var(--error-red); color: var(--error-red); border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; margin-bottom: 10px; width: 100%; }
+        .clear-btn { border-color: var(--text-muted); color: var(--text-muted); }
         .logout-btn:hover { background: var(--error-red); color: #fff; }
-        
-        /* Added clear button style */
-        .clear-btn { margin-top: 10px; padding: 10px; background: transparent; border: 1px solid #555; color: #888; border-radius: 6px; cursor: pointer; font-size: 11px; }
         .clear-btn:hover { border-color: #fff; color: #fff; }
 
         .chat-area { display: flex; flex-direction: column; background: #161616; min-height: 0; }
@@ -68,9 +66,7 @@
         .msg.sent { background: var(--primary-gold); color: #111; align-self: flex-end; border-bottom-right-radius: 2px; font-weight: 500; }
         .msg-meta { font-size: 10px; color: var(--text-muted); margin-bottom: 3px; display: block; }
         .msg.sent .msg-meta { color: #333; font-weight: bold; }
-        
-        /* Delete button style */
-        .del-btn { position: absolute; top: 5px; right: 5px; font-size: 9px; cursor: pointer; color: rgba(0,0,0,0.4); }
+        .del-x { position: absolute; top: 0; right: -15px; cursor: pointer; color: var(--error-red); font-weight: bold; font-size: 12px; }
 
         .input-bar { padding: 15px; background: var(--card-bg); border-top: 1px solid var(--border-color); display: flex; gap: 8px; flex-shrink: 0; }
         .input-bar input { flex: 1; padding: 12px; background: #111; border: 1px solid var(--border-color); border-radius: 6px; color: #fff; font-size: 16px; }
@@ -154,32 +150,30 @@
         const PRESENCE_TOPIC = "bayan/company/presence/";
         let onlineUsers = {};
 
-        // --- PERSISTENCE LOGIC ---
-        function saveMessageToStorage(msgObj) {
-            let history = JSON.parse(localStorage.getItem('bct_history') || '[]');
-            history.push(msgObj);
-            localStorage.setItem('bct_history', JSON.stringify(history));
-        }
-
-        function deleteMessageFromStorage(id) {
-            let history = JSON.parse(localStorage.getItem('bct_history') || '[]');
-            history = history.filter(m => m.id !== id);
-            localStorage.setItem('bct_history', JSON.stringify(history));
-            document.getElementById('msg-' + id).remove();
+        function saveMsg(m) {
+            let hist = JSON.parse(localStorage.getItem('bct_hist') || '[]');
+            hist.push(m);
+            localStorage.setItem('bct_hist', JSON.stringify(hist));
         }
 
         function clearAllChat() {
-            if(confirm("Delete all chat history?")) {
-                localStorage.removeItem('bct_history');
+            if(confirm("Clear all messages?")) {
+                localStorage.removeItem('bct_hist');
                 document.getElementById('messagesWindow').innerHTML = "";
             }
         }
 
-        function loadHistory() {
-            const history = JSON.parse(localStorage.getItem('bct_history') || '[]');
-            history.forEach(m => displayIncomingMessage(m.sender, m.message, m.isSelf, m.fileData, m.fileName, m.id, false));
+        function delMsg(id, broadcast = true) {
+            document.getElementById('msg-'+id)?.remove();
+            let hist = JSON.parse(localStorage.getItem('bct_hist') || '[]');
+            hist = hist.filter(m => m.id !== id);
+            localStorage.setItem('bct_hist', JSON.stringify(hist));
+            if(broadcast) client.publish(CHAT_TOPIC, JSON.stringify({ type: 'del', id: id }));
         }
-        // -------------------------
+
+        function loadHistory() {
+            JSON.parse(localStorage.getItem('bct_hist') || '[]').forEach(m => displayMsg(m.sender, m.msg, m.isSelf, m.file, m.fileName, m.id, false));
+        }
 
         function toggleMobileMenu() {
             const sidebar = document.getElementById('sidebarMenu');
@@ -226,8 +220,10 @@
                     if (data.status === "online") onlineUsers[data.user] = true;
                     else delete onlineUsers[data.user];
                     renderPresenceList();
+                } else if (data.type === 'del') {
+                    delMsg(data.id, false);
                 } else if (data.token !== deviceSessionToken) {
-                    displayIncomingMessage(data.user, data.message, false, data.file, data.fileName, data.id, true);
+                    displayMsg(data.user, data.message, false, data.file, data.fileName, data.id, true);
                 }
             });
         }
@@ -239,29 +235,22 @@
             const id = Date.now();
             reader.onload = function(e) {
                 client.publish(CHAT_TOPIC, JSON.stringify({ token: deviceSessionToken, user: currentActiveUser, file: e.target.result, fileName: file.name, id: id }));
-                displayIncomingMessage("You", null, true, e.target.result, file.name, id, true);
+                displayMsg("You", null, true, e.target.result, file.name, id, true);
             };
             reader.readAsDataURL(file);
         }
 
-        function displayIncomingMessage(sender, message, isSelf = false, fileData = null, fileName = "", id = Date.now(), save = false) {
-            const windowObj = document.getElementById('messagesWindow');
-            let content = message ? message : "";
-            if (fileData) {
-                const isImg = fileData.startsWith('data:image');
-                content += `<div style="margin-top:5px">
-                    <a href="${fileData}" download="${fileName}" style="color:var(--primary-gold); font-weight:bold; text-decoration:none">
-                        ${isImg ? `<img src="${fileData}" style="max-width:100%; display:block; border-radius:4px; margin-bottom:5px">` : "📄"} 
-                        📥 ${fileName}
-                    </a>
-                </div>`;
+        function displayMsg(sender, msg, isSelf, file, fileName, id, save) {
+            const win = document.getElementById('messagesWindow');
+            let content = msg || "";
+            if (file) {
+                const isImg = file.startsWith('data:image');
+                content += `<div style="margin-top:5px"><a href="${file}" download="${fileName}" style="color:var(--primary-gold); font-weight:bold; text-decoration:none">${isImg ? `<img src="${file}" style="max-width:100%; display:block; border-radius:4px; margin-bottom:5px">` : "📄"} 📥 ${fileName}</a></div>`;
             }
-            
-            const delBtn = isSelf ? `<span class="del-btn" onclick="deleteMessageFromStorage(${id})">✕</span>` : "";
-            windowObj.insertAdjacentHTML('beforeend', `<div class="msg ${isSelf ? 'sent' : 'received'}" id="msg-${id}"><span class="msg-meta">${sender}</span>${content}${delBtn}</div>`);
-            windowObj.scrollTop = windowObj.scrollHeight;
-            
-            if (save) saveMessageToStorage({id, sender, message, isSelf, fileData, fileName});
+            const del = isSelf ? `<span class="del-x" onclick="delMsg(${id})">✕</span>` : "";
+            win.insertAdjacentHTML('beforeend', `<div class="msg ${isSelf ? 'sent' : 'received'}" id="msg-${id}"><span class="msg-meta">${sender}</span>${content}${del}</div>`);
+            win.scrollTop = win.scrollHeight;
+            if (save) saveMsg({id, sender, msg, isSelf, file, fileName});
         }
 
         function sendMessage(event) {
@@ -270,7 +259,7 @@
             if (input.value.trim() === "" || !client) return;
             const id = Date.now();
             client.publish(CHAT_TOPIC, JSON.stringify({ token: deviceSessionToken, user: currentActiveUser, message: input.value, id: id }));
-            displayIncomingMessage("You", input.value, true, null, null, id, true);
+            displayMsg("You", input.value, true, null, null, id, true);
             input.value = "";
         }
 
