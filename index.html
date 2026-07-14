@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BAYAN Company (BCT) - Communication Portal</title>
+    
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+        import { getAuth, signInAnonymously, updateProfile } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+        import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+        // Your Firebase Configuration[span_2](start_span)[span_2](end_span)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDiC7pfe_Bwg2-k8b_vG5czJHaOrJieEmE",
+            authDomain: "bct-66404.firebaseapp.com",
+            databaseURL: "https://bct-66404-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "bct-66404",
+            storageBucket: "bct-66404.firebasestorage.app",
+            messagingSenderId: "337031921557",
+            appId: "1:337031921557:web:b28321a917c3bdf572809c",
+            measurementId: "G-LZ2XK1EF0H"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const db = getDatabase();
+
+        window.handleLogin = async (event) => {
+            event.preventDefault();
+            const selectedId = document.getElementById('portal-id').value;
+            const password = document.getElementById('password').value;
+
+            // Simple Password Check
+            if (password !== "Bayan2026") {
+                const box = document.getElementById('message-box');
+                box.className = "error"; box.innerText = "Invalid Password."; box.style.display = "block";
+                return;
+            }
+
+            try {
+                const userCredential = await signInAnonymously(auth);
+                await updateProfile(userCredential.user, { displayName: selectedId });
+                
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('dashboardScreen').style.display = 'grid';
+                document.getElementById('displayUser').innerText = selectedId;
+                
+                // Initialize message sync
+                onChildAdded(ref(db, 'messages/'), (snapshot) => {
+                    const data = snapshot.val();
+                    const isSelf = (data.user === selectedId);
+                    displayIncomingMessage(data.user, data.text, isSelf);
+                });
+            } catch (error) {
+                console.error("Login Error:", error);
+            }
+        };
+
+        window.sendMessage = (event) => {
+            event.preventDefault();
+            const input = document.getElementById('typeBox');
+            if (input.value.trim() === "") return;
+
+            push(ref(db, 'messages/'), {
+                user: auth.currentUser.displayName,
+                text: input.value,
+                timestamp: Date.now()
+            });
+            input.value = "";
+        };
+
+        function displayIncomingMessage(sender, message, isSelf) {
+            const windowObj = document.getElementById('messagesWindow');
+            windowObj.insertAdjacentHTML('beforeend', `
+                <div class="msg ${isSelf ? 'sent' : 'received'}">
+                    <span class="msg-meta">${sender}</span>${message}
+                </div>`);
+            windowObj.scrollTop = windowObj.scrollHeight;
+        }
+
+        window.handleLogout = () => { location.reload(); };
+    </script>
+
+    <!-- Keep your original CSS styles here -->
+    <style>
+        /* ... (Keep all your existing CSS inside these tags) ... */
+    </style>
+</head>
+<body>
+    <!-- Keep your existing HTML body structure here -->
+    <!-- Ensure your Login form has onsubmit="handleLogin(event)" -->
+    <!-- Ensure your Input Bar form has onsubmit="sendMessage(event)" -->
+</body>
+</html>
