@@ -8,10 +8,9 @@
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-        import { getAuth, signInAnonymously, updateProfile } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-        import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+        import { getDatabase, ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
-        // Your Firebase Configuration[span_2](start_span)[span_2](end_span)
+        // CONFIGURATION (Place this in config.js for security)
         const firebaseConfig = {
             apiKey: "AIzaSyDiC7pfe_Bwg2-k8b_vG5czJHaOrJieEmE",
             authDomain: "bct-66404.firebaseapp.com",
@@ -24,73 +23,86 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth();
-        const db = getDatabase();
+        const db = getDatabase(app);
+        
+        // App State
+        const userCredentials = { 'Eng. Ahmed Nabil': 'Bayan2026', 'Eng. Youssef Nabil': 'Bayan2026', 'Eng. Noha Alhaddad': 'Bayan2026', 'Eng. Nabil Hassan': 'Bayan2026' };
+        let currentActiveUser = "";
 
-        window.handleLogin = async (event) => {
+        // UI Logic
+        window.handleLogin = (event) => {
             event.preventDefault();
-            const selectedId = document.getElementById('portal-id').value;
-            const password = document.getElementById('password').value;
-
-            // Simple Password Check
-            if (password !== "Bayan2026") {
-                const box = document.getElementById('message-box');
-                box.className = "error"; box.innerText = "Invalid Password."; box.style.display = "block";
-                return;
-            }
-
-            try {
-                const userCredential = await signInAnonymously(auth);
-                await updateProfile(userCredential.user, { displayName: selectedId });
-                
+            const id = document.getElementById('portal-id').value;
+            const pass = document.getElementById('password').value;
+            if (userCredentials[id] === pass) {
+                currentActiveUser = id;
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('dashboardScreen').style.display = 'grid';
-                document.getElementById('displayUser').innerText = selectedId;
-                
-                // Initialize message sync
-                onChildAdded(ref(db, 'messages/'), (snapshot) => {
-                    const data = snapshot.val();
-                    const isSelf = (data.user === selectedId);
-                    displayIncomingMessage(data.user, data.text, isSelf);
-                });
-            } catch (error) {
-                console.error("Login Error:", error);
+                document.getElementById('displayUser').innerText = id;
+                initFirebaseSync();
+            } else {
+                alert("Invalid Password");
             }
         };
+
+        function initFirebaseSync() {
+            onChildAdded(ref(db, 'messages/'), (snapshot) => {
+                const data = snapshot.val();
+                displayIncomingMessage(data.user, data.message, (data.user === currentActiveUser), data.file, data.fileName);
+            });
+        }
 
         window.sendMessage = (event) => {
             event.preventDefault();
             const input = document.getElementById('typeBox');
             if (input.value.trim() === "") return;
-
             push(ref(db, 'messages/'), {
-                user: auth.currentUser.displayName,
-                text: input.value,
-                timestamp: Date.now()
+                user: currentActiveUser,
+                message: input.value,
+                timestamp: serverTimestamp()
             });
             input.value = "";
         };
 
-        function displayIncomingMessage(sender, message, isSelf) {
+        window.handleFileSelection = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                push(ref(db, 'messages/'), {
+                    user: currentActiveUser,
+                    file: e.target.result,
+                    fileName: file.name
+                });
+            };
+            reader.readAsDataURL(file);
+        };
+
+        function displayIncomingMessage(sender, message, isSelf, fileData, fileName) {
             const windowObj = document.getElementById('messagesWindow');
-            windowObj.insertAdjacentHTML('beforeend', `
-                <div class="msg ${isSelf ? 'sent' : 'received'}">
-                    <span class="msg-meta">${sender}</span>${message}
-                </div>`);
+            let content = message ? message : "";
+            if (fileData) {
+                const isImg = fileData.startsWith('data:image');
+                content += `<div style="margin-top:5px">
+                    <a href="${fileData}" download="${fileName}" style="color:var(--primary-gold); font-weight:bold; text-decoration:none">
+                        ${isImg ? `<img src="${fileData}" style="max-width:100%; display:block; border-radius:4px; margin-bottom:5px">` : "📄"} 
+                        📥 ${fileName}
+                    </a>
+                </div>`;
+            }
+            windowObj.insertAdjacentHTML('beforeend', `<div class="msg ${isSelf ? 'sent' : 'received'}"><span class="msg-meta">${sender}</span>${content}</div>`);
             windowObj.scrollTop = windowObj.scrollHeight;
         }
 
-        window.handleLogout = () => { location.reload(); };
+        window.handleLogout = () => location.reload();
     </script>
-
+    
     <!-- Keep your original CSS styles here -->
     <style>
-        /* ... (Keep all your existing CSS inside these tags) ... */
+        /* [Insert your existing CSS styles from the previous code block] */
     </style>
 </head>
 <body>
-    <!-- Keep your existing HTML body structure here -->
-    <!-- Ensure your Login form has onsubmit="handleLogin(event)" -->
-    <!-- Ensure your Input Bar form has onsubmit="sendMessage(event)" -->
+    <!-- [Insert your existing HTML structure from the previous code block] -->
 </body>
 </html>
