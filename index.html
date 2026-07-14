@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BAYAN Company (BCT) - Communication Portal</title>
     
-    <!-- Firebase SDK Setup -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
-
         const firebaseConfig = {
             apiKey: "AIzaSyAUQl0ozyAaI6UrM98uYVWIdK1kobjjL4g",
             authDomain: "bct-66404.firebaseapp.com",
@@ -20,36 +18,21 @@
             appId: "1:337031921557:web:b28321a917c3bdf572809c",
             measurementId: "G-LZ2XK1EF0H"
         };
-
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
     </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
     <style>
-        :root {
-            --primary-gold: #b38f4f;
-            --dark-gold: #8e6f37;
-            --dark-bg: #111111;
-            --card-bg: #1a1a1a;
-            --text-light: #ffffff;
-            --text-muted: #aaaaaa;
-            --border-color: #333333;
-            --success-green: #2ecc71;
-            --error-red: #e74c3c;
-        }
-
+        :root { --primary-gold: #b38f4f; --dark-gold: #8e6f37; --dark-bg: #111111; --card-bg: #1a1a1a; --text-light: #ffffff; --text-muted: #aaaaaa; --border-color: #333333; --success-green: #2ecc71; --error-red: #e74c3c; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--dark-bg); color: var(--text-light); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 10px; overflow: hidden; }
         .portal-container { background-color: var(--card-bg); width: 100%; max-width: 420px; padding: 30px 20px; border-radius: 12px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); border: 1px solid var(--border-color); text-align: center; }
         .dashboard-container { display: none; background-color: var(--card-bg); width: 100%; max-width: 900px; height: 85vh; border-radius: 12px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); border: 1px solid var(--border-color); grid-template-columns: 260px 1fr; overflow: hidden; }
-        .logo-area { margin-bottom: 20px; }
-        .logo-icon { font-size: 54px; font-weight: bold; color: var(--primary-gold); line-height: 1; margin-bottom: 5px; font-family: 'Times New Roman', Times, serif; }
-        .company-name { font-size: 22px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-        .company-subtext { font-size: 13px; color: var(--primary-gold); letter-spacing: 3px; font-weight: bold; margin-top: 2px; }
+        .logo-area { margin-bottom: 20px; } .logo-icon { font-size: 54px; font-weight: bold; color: var(--primary-gold); line-height: 1; margin-bottom: 5px; font-family: 'Times New Roman', Times, serif; }
+        .company-name { font-size: 22px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; } .company-subtext { font-size: 13px; color: var(--primary-gold); letter-spacing: 3px; font-weight: bold; margin-top: 2px; }
         .portal-title { font-size: 16px; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
-        .input-group { margin-bottom: 20px; text-align: left; }
-        .input-group label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-gold); margin-bottom: 8px; }
+        .input-group { margin-bottom: 20px; text-align: left; } .input-group label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-gold); margin-bottom: 8px; }
         .input-group select, .input-group input { width: 100%; padding: 12px; background-color: #222; border: 1px solid var(--border-color); border-radius: 6px; color: #fff; font-size: 16px; }
         .login-btn { width: 100%; padding: 14px; background-color: var(--primary-gold); border: none; border-radius: 6px; color: #111; font-size: 15px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
         .login-btn:hover { background-color: var(--dark-gold); color: #fff; }
@@ -78,14 +61,11 @@
         .input-bar { padding: 15px; background: var(--card-bg); border-top: 1px solid var(--border-color); display: flex; gap: 8px; flex-shrink: 0; }
         .input-bar input { flex: 1; padding: 12px; background: #111; border: 1px solid var(--border-color); border-radius: 6px; color: #fff; font-size: 16px; }
         .send-btn { padding: 0 15px; background: var(--primary-gold); border: none; border-radius: 6px; color: #111; font-weight: bold; cursor: pointer; font-size: 15px; }
-
         @media (max-width: 768px) {
-            body { padding: 0; }
-            .portal-container { border-radius: 0; border: none; height: 100vh; }
+            body { padding: 0; } .portal-container { border-radius: 0; border: none; height: 100vh; }
             .dashboard-container { grid-template-columns: 1fr; height: 100vh; border-radius: 0; border: none; }
             .sidebar { display: none; position: absolute; top: 55px; left: 0; right: 0; bottom: 0; z-index: 10; background: #111; }
-            .sidebar.active { display: flex; }
-            .mobile-toggle-btn { display: block; }
+            .sidebar.active { display: flex; } .mobile-toggle-btn { display: block; }
         }
     </style>
 </head>
@@ -156,6 +136,29 @@
         const PRESENCE_TOPIC = "bayan/company/presence/";
         let onlineUsers = {};
 
+        function loadChatHistory() {
+            const history = JSON.parse(localStorage.getItem('bct_chat_history') || '[]');
+            history.forEach(m => renderMessageUI(m.sender, m.message, m.isSelf, m.fileData, m.fileName));
+        }
+
+        function saveMessage(sender, message, isSelf, fileData, fileName) {
+            const history = JSON.parse(localStorage.getItem('bct_chat_history') || '[]');
+            history.push({ sender, message, isSelf, fileData, fileName });
+            if (history.length > 50) history.shift();
+            localStorage.setItem('bct_chat_history', JSON.stringify(history));
+        }
+
+        function renderMessageUI(sender, message, isSelf, fileData, fileName) {
+            const windowObj = document.getElementById('messagesWindow');
+            let content = message ? message : "";
+            if (fileData) {
+                const isImg = fileData.startsWith('data:image');
+                content += `<div style="margin-top:5px"><a href="${fileData}" download="${fileName}" style="color:var(--primary-gold); font-weight:bold; text-decoration:none">${isImg ? `<img src="${fileData}" style="max-width:100%; display:block; border-radius:4px; margin-bottom:5px">` : "📄"} 📥 ${fileName}</a></div>`;
+            }
+            windowObj.insertAdjacentHTML('beforeend', `<div class="msg ${isSelf ? 'sent' : 'received'}"><span class="msg-meta">${sender}</span>${content}</div>`);
+            windowObj.scrollTop = windowObj.scrollHeight;
+        }
+
         function toggleMobileMenu() {
             const sidebar = document.getElementById('sidebarMenu');
             sidebar.classList.toggle('active');
@@ -178,6 +181,7 @@
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('dashboardScreen').style.display = 'grid';
                 document.getElementById('displayUser').innerText = selectedId;
+                loadChatHistory();
                 initLiveSync();
             } else {
                 const box = document.getElementById('message-box');
@@ -201,7 +205,8 @@
                     else delete onlineUsers[data.user];
                     renderPresenceList();
                 } else if (data.token !== deviceSessionToken) {
-                    displayIncomingMessage(data.user, data.message, false, data.file, data.fileName);
+                    renderMessageUI(data.user, data.message, false, data.file, data.fileName);
+                    saveMessage(data.user, data.message, false, data.file, data.fileName);
                 }
             });
         }
@@ -212,25 +217,10 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 client.publish(CHAT_TOPIC, JSON.stringify({ token: deviceSessionToken, user: currentActiveUser, file: e.target.result, fileName: file.name }));
-                displayIncomingMessage("You", null, true, e.target.result, file.name);
+                renderMessageUI("You", null, true, e.target.result, file.name);
+                saveMessage("You", null, true, e.target.result, file.name);
             };
             reader.readAsDataURL(file);
-        }
-
-        function displayIncomingMessage(sender, message, isSelf = false, fileData = null, fileName = "") {
-            const windowObj = document.getElementById('messagesWindow');
-            let content = message ? message : "";
-            if (fileData) {
-                const isImg = fileData.startsWith('data:image');
-                content += `<div style="margin-top:5px">
-                    <a href="${fileData}" download="${fileName}" style="color:var(--primary-gold); font-weight:bold; text-decoration:none">
-                        ${isImg ? `<img src="${fileData}" style="max-width:100%; display:block; border-radius:4px; margin-bottom:5px">` : "📄"} 
-                        📥 ${fileName}
-                    </a>
-                </div>`;
-            }
-            windowObj.insertAdjacentHTML('beforeend', `<div class="msg ${isSelf ? 'sent' : 'received'}"><span class="msg-meta">${sender}</span>${content}</div>`);
-            windowObj.scrollTop = windowObj.scrollHeight;
         }
 
         function sendMessage(event) {
@@ -238,7 +228,8 @@
             const input = document.getElementById('typeBox');
             if (input.value.trim() === "" || !client) return;
             client.publish(CHAT_TOPIC, JSON.stringify({ token: deviceSessionToken, user: currentActiveUser, message: input.value }));
-            displayIncomingMessage("You", input.value, true);
+            renderMessageUI("You", input.value, true);
+            saveMessage("You", input.value, true);
             input.value = "";
         }
 
