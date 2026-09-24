@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eng. Ahmed Nabil | Advanced Engineering & Project Controls Services</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #0d9488;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --accent: #d97706;
+            --gray: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--dark), var(--primary));
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p.subtitle {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            margin-bottom: 20px;
+        }
+
+        .credentials-badges {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        nav {
+            background-color: var(--dark);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            display: block;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        nav a:hover {
+            background-color: var(--secondary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 40px 20px;
+        }
+
+        section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            width: 60px;
+            height: 4px;
+            background-color: var(--secondary);
+            display: block;
+            margin: 8px auto 0;
+            border-radius: 2px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+
+        .card i.icon {
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .card-list {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .card-list li {
+            position: relative;
+            padding-right: 20px;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .card-list li::before {
+            content: "✓";
+            position: absolute;
+            right: 0;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .showcase-item {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .showcase-content h4 {
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .showcase-content p {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .tag {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .portfolio-cta {
+            text-align: center;
+            margin-top: 35px;
+            padding: 25px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .portfolio-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .portfolio-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--secondary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .portfolio-btn:hover {
+            background-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .why-us {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .why-us-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .why-us-item i {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-left: 15px;
+            margin-top: 5px;
+        }
+
+        .contact-box {
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            color: white;
+            padding: 40px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .contact-btn {
+            background-color: white;
+            color: var(--primary);
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .contact-btn:hover {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        /* LTR class to force + sign at the start of international numbers in RTL layouts */
+        .phone-num {
+            direction: ltr;
+            display: inline-block;
+        }
+
+        footer {
+            background-color: var(--dark);
+            color: #94a3b8;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="home">
+        <h1>المهندس أحمد نبيل | Eng. Ahmed Nabil</h1>
+        <p class="subtitle">الخدمات الهندسية والاستشارية المتكاملة | Engineering Services Portal</p>
+        <p style="max-width: 800px; margin: 0 auto 15px auto; color: #e2e8f0;">
+            تقديم خدمات هندسية واستشارية متخصصة في إدارة ضبط المشاريع، التخطيط الزمني، التحليل الإنشائي والجيوتقني، ونمذجة معلومات البناء BIM لضمان أداء هندسي ودقيق للمشاريع.
+        </p>
+        <div class="credentials-badges">
+            <span class="badge"><i class="fa-solid fa-certificate"></i> GMICE (ICE, UK) Registered</span>
+            <span class="badge"><i class="fa-solid fa-id-card"></i> نقابة المهندسين المصرية</span>
+            <span class="badge"><i class="fa-solid fa-graduation-cap"></i> Danish B.Eng. Equivalent</span>
+            <span class="badge"><i class="fa-solid fa-location-dot"></i> الإسكندرية، مصر</span>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#home">الرئيسية</a></li>
+            <li><a href="#services">الخدمات المقدمة</a></li>
+            <li><a href="#credentials">المؤهلات والاعتمادات</a></li>
+            <li><a href="#showcase">نماذج الأعمال والمخرجات</a></li>
+            <li><a href="#why-us">لماذا تختارنا؟</a></li>
+            <li><a href="#contact">تواصل معنا</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+
+        <!-- SERVICES OFFERED -->
+        <section id="services">
+            <h2 class="section-title">الخدمات الهندسية المقدمة (Engineering Services)</h2>
+            <div class="grid-3">
+                
+                <div class="card">
+                    <i class="fa-solid fa-chart-gantt icon"></i>
+                    <h3>خدمات التخطيط والتحكم الزمني (Primavera P6)</h3>
+                    <p style="font-size: 0.85rem; color: var(--gray); margin-bottom: 10px;">إدارة وحوكمة الجدول الزمني للمشاريع الهندسية والإنشائية.</p>
+                    <ul class="card-list">
+                        <li>إعداد الجداول الزمنية المرجعية (Baseline Schedule)</li>
+                        <li>بناء هيكل تجزئة العمل (WBS) وتحديد المسارات الحرجة (CPM)</li>
+                        <li>تحميل الموارد والتكاليف (Resource &amp; Cost Loading)</li>
+                        <li>تحليل القيمة المكتسبة (EVM) ومتابعة مؤشرات الأداء (SPI/CPI)</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <i class="fa-solid fa-file-invoice-dollar icon"></i>
+                    <h3>خدمات إدارة التكاليف والتدفقات النقدية (Cost Control)</h3>
+                    <p style="font-size: 0.85rem; color: var(--gray); margin-bottom: 10px;">ضبط الميزانيات والرقابة المالية للمشاريع عبر نماذج MS Excel متقدمة.</p>
+                    <ul class="card-list">
+                        <li>إعداد توقعات التدفقات النقدية (Cash Flow Forecasting)</li>
+                        <li>رسم ومتابعة منحنيات الأداء التراكمية (S-Curves)</li>
+                        <li>متابعة المستخلصات وحساب الدفعات الدورية</li>
+                        <li>تحليل انحرافات التكلفة وتوقعات الإنهاء (EAC &amp; ETC)</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <i class="fa-solid fa-cubes icon"></i>
+                    <h3>خدمات نمذجة البناء والتفاصيل (BIM &amp; Revit)</h3>
+                    <p style="font-size: 0.85rem; color: var(--gray); margin-bottom: 10px;">إنشاء النماذج الرقمية وتفاصيل التسليح للتنفيذ الدقيق.</p>
+                    <ul class="card-list">
+                        <li>بناء نماذج إنشائية ثلاثية الأبعاد بدقة LOD 350-400</li>
+                        <li>تفاصيل حديد التسليح ثلاثي الأبعاد (3D Rebar Detailing)</li>
+                        <li>كشف التعارضات وتفادي أخطاء الموقع (Clash Detection)</li>
+                        <li>إخراج حصر الكميات الآلي والمباشر (Automated QTO)</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <i class="fa-solid fa-layer-group icon"></i>
+                    <h3>خدمات التحليل الجيوتقني للتربة (PLAXIS 3D)</h3>
+                    <p style="font-size: 0.85rem; color: var(--gray); margin-bottom: 10px;">دراســات التفاعل بين التربة والمنشأ والأساسات العميقة.</p>
+                    <ul class="card-list">
+                        <li>التحليل المتقدم باستخدام العناصر المنتهية (3D FEM)</li>
+                        <li>حساب وتقييم معدلات هبوط التربة عبر الزمن (Settlement Analysis)</li>
+                        <li>تحليل الأساسات العميقة والخوازيق وثبات الحفريات</li>
+                        <li>نمذجة تحسين التربة (Ground Improvement &amp; Stone Columns)</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <i class="fa-solid fa-building-user icon"></i>
+                    <h3>خدمات التحليل والتصميم الإنشائي (Robot Analysis)</h3>
+                    <p style="font-size: 0.85rem; color: var(--gray); margin-bottom: 10px;">تصميم المنشآت والتحقق من متطلبات السلامة والأكواد.</p>
+                    <ul class="card-list">
+                        <li>تحليل شامل للهياكل الخرسانية تحت الأحمال الرأسية والجانبية</li>
+                        <li>التحليل الديناميكي ومقاومة الزلازل والرياح</li>
+                        <li>التحقق من قص الثقب للأسقف (Flat Slab Punching Shear)</li>
+                        <li>مطابقة المعايير والأكواد المحلية والدولية</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <i class="fa-solid fa-drafting-table icon"></i>
+                    <h3>خدمات المخططات التنفيذية (AutoCAD Detailing)</h3>
+                    <p style="font-size: 0.85rem; color: var(--gray); margin-bottom: 10px;">إنتاج المخططات التنفيذية واللوحات الفنية المعتمدة.</p>
+                    <ul class="card-list">
+                        <li>إعداد المحاور والأوردة والمخططات التنفيذية للموقع</li>
+                        <li>لوحات تفاصيل التسليح للسقف، الأعمدة، والقواعد</li>
+                        <li>جداول تفريد حديد التسليح (Bar Bending Schedules)</li>
+                    </ul>
+                </div>
+
+            </div>
+            
+            <div class="portfolio-cta" style="margin-top: 30px;">
+                <p style="margin-bottom: 10px; font-weight: 600; color: var(--dark);">لزيارة بوابة الخدمات الرسمية للاطلاع على تفاصيل وشروط تقديم الخدمات:</p>
+                <div class="portfolio-buttons">
+                    <a href="https://ahmednabilcivilengineer.github.io/A/" target="_blank" rel="noopener noreferrer" class="portfolio-btn">
+                        <i class="fa-solid fa-gears"></i> الانتقال إلى بوابة الخدمات المقدمة (Services Portal A)
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Credentials Section -->
+        <section id="credentials">
+            <h2 class="section-title">المؤهلات والاعتمادات الرسمية</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <h3><i class="fa-solid fa-award"></i> العضويات والاعتمادات الدولية</h3>
+                    <ul style="list-style: none; margin-top: 15px;">
+                        <li style="margin-bottom: 12px;">
+                            <strong>GMICE - Institution of Civil Engineers (UK)</strong><br>
+                            <span style="font-size:0.85rem; color: var(--gray);">عضو خريج مسجل برقم رسمي (أكتوبر 2025).</span>
+                        </li>
+                        <li style="margin-bottom: 12px;">
+                            <strong>Danish B.Eng. Equivalent</strong><br>
+                            <span style="font-size:0.85rem; color: var(--gray);">تقييم مؤهل من الهيئة الدنماركية للتعليم العالي (فبراير 2026).</span>
+                        </li>
+                        <li style="margin-bottom: 12px;">
+                            <strong>مهندس مدني مسجل - نقابة المهندسين المصرية</strong><br>
+                            <span style="font-size:0.85rem; color: var(--gray);">فرع الإسكندرية (2025).</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3><i class="fa-solid fa-graduation-cap"></i> التعليم الأكاديمي</h3>
+                    <ul style="list-style: none; margin-top: 15px;">
+                        <li style="margin-bottom: 12px;">
+                            <strong>بكالوريوس هندسة التشغيل والتشييد</strong><br>
+                            <span style="font-size:0.85rem; color: var(--gray);">الأكاديمية العربية للعلوم والتكنولوجيا والنقل البحري (يناير 2025).</span><br>
+                            <span style="font-size:0.85rem; color: var(--secondary);">معتمد من هيئة ABET الأمريكية | مشروع التخرج: ممتاز (A).</span>
+                        </li>
+                        <li>
+                            <strong>الدبلومة الأمريكية (High School Diploma)</strong><br>
+                            <span style="font-size:0.85rem; color: var(--gray);">مدرسة الإسكندرية اللغوية (2019) | SAT I: 1280.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Showcase Section (Samples) -->
+        <section id="showcase">
+            <h2 class="section-title">نماذج وعينات من المخرجات (Work Samples)</h2>
+            <div class="showcase-grid">
+                
+                <div class="showcase-item">
+                    <div class="showcase-content">
+                        <span class="tag">Project Control Sample</span>
+                        <h4>EVA S-Curve Report</h4>
+                        <p>عينة تقرير متابعة أداء المشروع عبر مؤشرات (PV, EV, AC) وحساب الانحرافات.</p>
+                    </div>
+                </div>
+
+                <div class="showcase-item">
+                    <div class="showcase-content">
+                        <span class="tag">Cost Control Sample</span>
+                        <h4>Cash Flow Forecasting Matrix</h4>
+                        <p>نموذج مالي استرشادي لتوقع التدفقات النقدية الشهرية والمصاريف.</p>
+                    </div>
+                </div>
+
+                <div class="showcase-item">
+                    <div class="showcase-content">
+                        <span class="tag">Primavera P6 Sample</span>
+                        <h4>CPM Schedule &amp; WBS</h4>
+                        <p>نموذج جدول زمني للمسار الحرج ومخطط تجزئة الأعمال الإنشائية.</p>
+                    </div>
+                </div>
+
+                <div class="showcase-item">
+                    <div class="showcase-content">
+                        <span class="tag">Robot Analysis Sample</span>
+                        <h4>Flat Slab Punching Shear &amp; FEM</h4>
+                        <p>عينة تحليل إنشائي للتحقق من قص الثقب وتحليل البلاطات اللاكمرية.</p>
+                    </div>
+                </div>
+
+                <div class="showcase-item">
+                    <div class="showcase-content">
+                        <span class="tag">Revit BIM Sample</span>
+                        <h4>3D Rebar Detailing &amp; Footings</h4>
+                        <p>نموذج ثلاثي الأبعاد لتفاصيل تسليح القواعد والأعمدة والمياد.</p>
+                    </div>
+                </div>
+
+                <div class="showcase-item">
+                    <div class="showcase-content">
+                        <span class="tag">PLAXIS 3D Sample</span>
+                        <h4>Geotechnical Settlement &amp; Piles</h4>
+                        <p>عينة تحليل هبوط التربة وسلوك الخوازيق تحت الأحمال المنشأة.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Portfolio Link CTA -->
+            <div class="portfolio-cta">
+                <p style="margin-bottom: 10px; font-weight: 600; color: var(--dark);">لمعاينة عينات المشاريع السابقة والتطبيقات العملية المفصلة:</p>
+                <div class="portfolio-buttons">
+                    <a href="https://ahmednabilcivilengineer.github.io/Construction/" target="_blank" rel="noopener noreferrer" class="portfolio-btn">
+                        <i class="fa-solid fa-helmet-safety"></i> معـرض مشاريع التشييد وعينات الأعمال (Samples Portfolio)
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Choose Us -->
+        <section id="why-us">
+            <h2 class="section-title">لماذا تختار التعامل معنا؟</h2>
+            <div class="why-us">
+                <div class="why-us-item">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <div>
+                        <h4>تكامل كامل للخدمات</h4>
+                        <p>ربط مباشر ودقيق بين التحليل الجيوتقني، والإنشائي، ونماذج الـ BIM، والجداول الزمنية وضبط التكاليف.</p>
+                    </div>
+                </div>
+                <div class="why-us-item">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <div>
+                        <h4>توفير الوقت والتكلفة</h4>
+                        <p>تصميمات محسنة تمنع إعادة العمل بالموقع (Rework)، وتتجنب التأخيرات وتكاليف أوامر التغيير.</p>
+                    </div>
+                </div>
+                <div class="why-us-item">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <div>
+                        <h4>التزام تام بالمعايير</h4>
+                        <p>مطابقة كاملة للكودات المحلية والدولية وتطبيق أعلى معايير الجودة والسلامة.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact">
+            <div class="contact-box">
+                <h2>جاهز للارتقاء بمشروعك القادم؟</h2>
+                <p>تواصل معنا اليوم للحصول على استشارة فنية متخصصة</p>
+                <div class="contact-links">
+                    <a href="tel:+201021076604" class="contact-btn"><i class="fa-solid fa-phone"></i> <span class="phone-num">+201021076604</span></a>
+                    <a href="https://wa.me/201021076604" target="_blank" rel="noopener noreferrer" class="contact-btn"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                    <a href="mailto:mypc1239@outlook.com" class="contact-btn"><i class="fa-solid fa-envelope"></i> mypc1239@outlook.com</a>
+                    <a href="https://www.facebook.com/share/1JXL2bXtdf/?mibextid=LQQJ4d" target="_blank" rel="noopener noreferrer" class="contact-btn"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>© 2026 Eng. Ahmed Nabil Mahmoud Hassan Youssef, GMICE. جميع الحقوق محفوظة.</p>
+    </footer>
+
+</body>
+</html>
